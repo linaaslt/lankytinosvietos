@@ -3,13 +3,70 @@
 <head>
 	<meta charset="utf-8">
 	<title> Lankytinos vietos </title>
-	 
+    		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">		
+		<style>
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+		</style>
+	    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+	    </script>
+	    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	    
+	    <script src="crud.js"></script>
+
+		<script>
+ 
+		$( document ).ready ( function() {
+
+			params = {
+			
+				fields: [ 'pav', 'kodas' ]
+				, fields_names: [ 'Šalys', 'kodas' ]
+				, url : 'http://localhost:8080/ajax/lst-salys'
+				, field_data: ''
+				, id_html_saraso: 'salys'
+				, id_html_dialog_formos: ''
+				, dialog_size_x: 300
+				, dialog_size_y: 390
+				, title_dialog_form: 'Šalys'
+				, url_save_rec: 'http://localhost:8080/ajax/salys-pakeisti'
+				, url_delete_rec:  'http://localhost:8080/ajax/salys-salinti'
+				, fields_edit:  [ 'pav', 'kodas' ]
+				, fields_ed_types: [ 'text', 'text' ]
+				, field_name: 'pav'
+			}
+			
+			crud_saliu = new crud ( params );
+			
+			crud_saliu.initEmpty();
+			crud_saliu.refreshData();
+			
+		});			
+	</script>	 
 </head>
 <body>
-<div>
 <h3> Šalys </h3>
 
  	Salių sąrašas
+ 	
+<div id="salys">
 </div>
- 	</body>
+ </body>
 </html>

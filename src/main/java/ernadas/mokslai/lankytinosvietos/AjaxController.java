@@ -20,10 +20,19 @@ public class AjaxController {
 	@Autowired
 	private SalysRepository salys_repository; 
 	
+	@Autowired
+	private MiestaiRepository miestai_repository; 
+	
 	@GetMapping(path="/lst-salys")
 	public @ResponseBody Iterable<Salys> getAllSalys() {
 		// This returns a JSON or XML with the users
 		return salys_repository.findAll();
+	}
+	
+	@GetMapping(path="/lst-miestai")
+	public @ResponseBody Iterable<Miestai> getAllMiestai() {
+		// This returns a JSON or XML with the users
+		return miestai_repository.findAll();
 	}
 	
 	@GetMapping(path="/salys")
@@ -51,13 +60,13 @@ public class AjaxController {
 	    		@RequestParam(required=false) String id	
 	    		, @RequestParam(required=false) String pav	
 	    		, @RequestParam(required=false) String kodas
-	    		, @RequestParam(required=false) String irasas
+	    		// , @RequestParam(required=false) String irasas
 
 	    	) {
 		 
 		 	String msg = "nieks neatlikta";
 		 
-		 	if ( irasas != null ) {
+		 	// if ( irasas != null ) {
 		 		
 		 		Salys salis = new Salys (
 		 				
@@ -67,7 +76,7 @@ public class AjaxController {
 		 				
 		 		);
 		 	
-		 		if ( irasas.equals ( "papildyti" ) ) {
+		 		// if ( irasas.equals ( "papildyti" ) ) {
 		 			
 				 	msg = "bandėm įrašyti";			 			
 		 			
@@ -75,9 +84,9 @@ public class AjaxController {
 		 				
 					 	msg = "tipo išsaugojom";
 		 			}
-		 		}
+		 		// }
 	 		
-		 	}
+		 	// }
 	    	   	
 	        return msg;
 	    }		
@@ -91,7 +100,7 @@ public class AjaxController {
 			 
 			 	String msg = "nieks neatlikta";
 			 
-			 	if ( ( irasas != null ) &&  irasas.equals ( "trinti" ) ) {
+//			 	if ( ( irasas != null ) &&  irasas.equals ( "trinti" ) ) {
 			 		
 			 		msg = "ieškomas irašas";
 			 		
@@ -104,7 +113,93 @@ public class AjaxController {
 				 		Salys salis = op_salys.get();
 				 		salys_repository.delete( salis );
 			 		}	
-			 	} 	   	
+//			 	} 	   	
+		     return msg;
+		 }
+	 
+	 @GetMapping(path="/miestai")
+		public @ResponseBody Miestai getMiestas1(
+				
+	    		@RequestParam(required=true) Integer id
+				) {
+			// This returns a JSON or XML with the users
+			Optional<Miestai> op_men = miestai_repository.findById( id );
+			
+			Miestai miests1 = new Miestai();
+			
+			if ( op_men.isPresent() ) {
+				
+				miests1 = op_men.get(); 
+			}
+			
+			System.out.println( miests1.toString() );
+			
+			return miests1;
+		}	
+
+	 @RequestMapping("/miestai-pakeisti")
+	    public @ResponseBody String miestasSave(
+	    		@RequestParam(required=false) String id	
+	    		, @RequestParam(required=false) String pav	
+	    		, @RequestParam(required=false) String platuma
+	    		, @RequestParam(required=false) String ilguma
+	    		, @RequestParam(required=false) String id_salies
+	    		// , @RequestParam(required=false) String irasas
+
+	    	) {
+		 
+		 	String msg = "nieks neatlikta";
+		 
+		 	// if ( irasas != null ) {
+		 		
+		 		Miestai miestas = new Miestai (
+		 				
+		 				FormPrepare.takeId ( id )
+		 				, pav
+		 				, FormPrepare.takeId ( platuma )
+		 				, FormPrepare.takeId ( ilguma )
+		 				, FormPrepare.takeId ( id_salies )
+		 				
+		 		);
+		 	
+		 		// if ( irasas.equals ( "papildyti" ) ) {
+		 			
+				 	msg = "bandėm įrašyti";			 			
+		 			
+		 			if ( miestai_repository.save( miestas ) != null ) {
+		 				
+					 	msg = "tipo išsaugojom";
+		 			}
+		 		// }
+	 		
+		 	// }
+	    	   	
+	        return msg;
+	    }		
+	
+	 @RequestMapping("/miestai-salinti")		
+	    public @ResponseBody String miestaiSalinti(
+	    		@RequestParam(required=false) String id	
+	    		, @RequestParam(required=false) String irasas
+
+	    	) {
+			 
+			 	String msg = "nieks neatlikta";
+			 
+//			 	if ( ( irasas != null ) &&  irasas.equals ( "trinti" ) ) {
+			 		
+			 		msg = "ieškomas irašas";
+			 		
+			 		Optional<Miestai> op_miestai = miestai_repository.findById( FormPrepare.takeId ( id ) );
+			 		
+			 		if ( ! op_miestai.isEmpty() ) {
+			 			
+				 		msg = "irašas surastas, trinam";
+				 		
+				 		Miestai miestas = op_miestai.get();
+				 		miestai_repository.delete( miestas );
+			 		}	
+//			 	} 	   	
 		     return msg;
 		 } 
 }

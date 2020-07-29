@@ -41,4 +41,11 @@ public class PageController {
         return "salys";
     }
 	
+	@RequestMapping("/miestai")
+    public String miestai(	
+    		Model model 
+    		) {
+		
+		return "miestai";
+	}
 }

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title> Lankytinos vietos </title>
+      		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    		<link rel="stylesheet" href="jqueryui.css">		
+		<style>
+			.anuliuotas, .sanuliuotas {
+				background-color: lightblue;
+			}
+			.ivykdytas, .sivykdytas {
+				background-color: lightgreen;
+			}
+			table {
+				border-collapse: colapse;
+			}
+			th {
+				background-color: lightgreen;			
+			}
+			th, td {
+				padding: 6px;
+				border: 1px solid grey;
+			}
+		</style>
+	    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+	    </script>
+	    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	    
+	    <script src="crud.js"></script>
+	    <script>
+		$( document ).ready ( function() {
+																										alert ( 'ok, doc ready'  );
+			crudMiestai = function(
+			
+				fields
+				, fields_names
+				, url
+				, field_data
+				, id_html_saraso
+				, id_html_dialog_formos
+				, dialog_size_x
+				, dialog_size_y
+				, title_dialog_form
+				, url_save_rec  
+				, url_delete_rec
+				, fields_edit
+				, field_name
+				, fields_ed_types
+			
+			) {
+				params = {
+				
+					fields: fields
+					, fields_names: fields_names
+					, url : url
+					, field_data: field_data
+					, id_html_saraso: id_html_saraso
+					, id_html_dialog_formos: id_html_dialog_formos
+					, dialog_size_x: dialog_size_x
+					, dialog_size_y: dialog_size_y
+					, title_dialog_form: title_dialog_form
+					, url_save_rec: url_save_rec  
+					, url_delete_rec: url_delete_rec
+					, fields_edit: fields_edit
+					, field_name: field_name
+					, fields_ed_types: fields_ed_types
+				}
+				crud.call ( this, params );	// objektu surišimas pagal https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype                (OS/eilute 1)  ..
+				
+				this.salys = [];
+				
+				this.getSalys = function() {
+																			 alert( 'run getSalysS' );
+					var i_amx = this;
+					
+					$.ajax({
+							url: "http://localhost:8080/ajax/lst-salys" 
+					}).done(
+					
+						function( data_salys ) {
+						
+							i_amx.salys = data_salys;
+						}
+					);
+				}
+			}
+				
+			crudMiestai.prototype = Object.create( crud.prototype ); // new crud;			// (OS/eilute 2)
+				
+			crudMiestai.prototype.constructor = crudMiestai;						// (OS/eilute 3)
+																				
+			crudMiestai.prototype.htmDialogoEditFields = function ( i_am  ) {			//  .. ir paveldejimas ir polimorfizmas pagal https://toranbillups.com/blog/archive/2013/05/15/Basic-javascript-inheritance-and-polymorphism/
+				
+																			// i_am.getSalys();
+																			
+				console.log ( this );															
+				options_salys = '';
+																		//  alert ( 'kiek saliu: ' + i_am.salys.length );
+																		 console.log (this.prototype.salys );
+				for ( i= 0; i < i_am.salys.length; i++ ) {
+																			//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
+
+					options_salys += '<option value="' + i_am.salys [ i ].id + '">' + i_am.salys [ i ].pav + '</option>';
+
+				}
+																			// alert( options );
+																			
+				i_am.params.res_str += 	'<label for="id_salies">Salis</label>' +
+						'<select type="text" name="id_salies" id="id_salies" class="text ui-widget-content ui-corner-all">' +
+							options_salys +
+						'</select>';																			
+																			
+				crud.prototype.htmDialogoEditFields ( i_am, [ 'pav', 'platuma', 'ilguma' ] );																			
+			
+	
+			}
+																				
+			crud_miestai = new crudMiestai ( 
+
+				[
+					'pav' 
+					, 'platuma'	
+					, 'ilguma'	
+					, 'id_salies'
+				]
+				, [  'pavadinimas', 'platuma', 'ilguma', 'salies<br>id' ]
+				, 'http://localhost:8080/ajax/lst-miestai'
+				, ''				
+				, 'miestai'
+				, ''
+				, 400
+				, 640
+				, 'Miestas'
+				,  'http://localhost:8080/ajax/miestai-pakeisti'
+				,  'http://localhost:8080/ajax/miestai-salinti'
+				, [ 
+					'pav' 
+					, 'platuma'	
+					, 'ilguma'	
+					, 'id_salies'
+				]
+				, 'pav'
+				,  [ 'text', 'text', 'text', 'select' ]
+			);
+			
+			// console.log ( crud_miestai );
+			
+			crud_miestai.initEmpty();
+			crud_miestai.refreshData();			
+
+			crud_miestai.getSalys();
+			
+								
+		});	
+	</script>
+	</head>
+<body>
+<h3> Miestai </h3>
+
+ 	Salių sąrašas
+ 	
+<div id="miestai">
+</div>
+ </body>
+</html>
