@@ -33,6 +33,34 @@
 	    <script>
 		$( document ).ready ( function() {
 																										alert ( 'ok, doc ready'  );
+																										
+					
+			$.ajax({
+					url: "http://localhost:8080/ajax/lst-salys" 
+			}).done(
+			
+				function( data_salys ) {
+				
+					options_salys = '';
+					
+					for ( i= 0; i < data_salys.length; i++ ) {
+																				//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
+	
+						options_salys += '<option value="' + data_salys [ i ].id + '">' + data_salys [ i ].pav + '</option>';
+	
+					}
+																			// alert( options );
+																			
+					select_salys = 	'<label for="id_salies">Salis</label>' +
+						'<select type="text" name="id_salies" id="id_salies" class="text ui-widget-content ui-corner-all">' +
+							options_salys +
+						'</select>';
+						
+					$( '#id_salies_place' ).html ( select_salys );
+				}	
+			);
+																										
+																																																
 			crudMiestai = function(
 			
 				fields
@@ -69,54 +97,11 @@
 					, fields_ed_types: fields_ed_types
 				}
 				crud.call ( this, params );	// objektu surišimas pagal https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype                (OS/eilute 1)  ..
-				
-				this.salys = [];
-				
-				this.getSalys = function() {
-																			 alert( 'run getSalysS' );
-					var i_amx = this;
-					
-					$.ajax({
-							url: "http://localhost:8080/ajax/lst-salys" 
-					}).done(
-					
-						function( data_salys ) {
-						
-							i_amx.salys = data_salys;
-						}
-					);
-				}
 			}
 				
 			crudMiestai.prototype = Object.create( crud.prototype ); // new crud;			// (OS/eilute 2)
 				
-			crudMiestai.prototype.constructor = crudMiestai;						// (OS/eilute 3)
-																				
-			crudMiestai.prototype.htmDialogoEditFields = function ( i_am  ) {			//  .. ir paveldejimas ir polimorfizmas pagal https://toranbillups.com/blog/archive/2013/05/15/Basic-javascript-inheritance-and-polymorphism/
-				
-																			// i_am.getSalys();
-																			
-				console.log ( this );															
-				options_salys = '';
-																		//  alert ( 'kiek saliu: ' + i_am.salys.length );
-																		 console.log (this.prototype.salys );
-				for ( i= 0; i < i_am.salys.length; i++ ) {
-																			//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
-
-					options_salys += '<option value="' + i_am.salys [ i ].id + '">' + i_am.salys [ i ].pav + '</option>';
-
-				}
-																			// alert( options );
-																			
-				i_am.params.res_str += 	'<label for="id_salies">Salis</label>' +
-						'<select type="text" name="id_salies" id="id_salies" class="text ui-widget-content ui-corner-all">' +
-							options_salys +
-						'</select>';																			
-																			
-				crud.prototype.htmDialogoEditFields ( i_am, [ 'pav', 'platuma', 'ilguma' ] );																			
-			
-	
-			}
+			crudMiestai.prototype.constructor = crudMiestai;						// (OS/eilute 3)																			
 																				
 			crud_miestai = new crudMiestai ( 
 
@@ -130,7 +115,7 @@
 				, 'http://localhost:8080/ajax/lst-miestai'
 				, ''				
 				, 'miestai'
-				, ''
+				, 'miesto_dialogo_forma'
 				, 400
 				, 640
 				, 'Miestas'
@@ -148,12 +133,8 @@
 			
 			// console.log ( crud_miestai );
 			
-			crud_miestai.initEmpty();
-			crud_miestai.refreshData();			
-
-			crud_miestai.getSalys();
-			
-								
+			crud_miestai.initEmpty();						
+			crud_miestai.refreshData();										
 		});	
 	</script>
 	</head>
@@ -163,6 +144,32 @@
  	Salių sąrašas
  	
 <div id="miestai">
+</div>
+<div id="miesto_dialogo_forma" class="ui-dialog-content ui-widget-content">
+	<p class="validateTips">Visi laukeliai turi buti užpildyti.</p>
+	<p class="name_item" id="name_item"></p>
+	<form action="">
+		<fieldset>
+		
+			<div id="id_salies_place">
+				<label for="id_salies">Salis</label>
+				<select type="text" name="id_salies" id="id_salies" class="text ui-widget-content ui-corner-all">
+				</select>
+			</div>
+				
+			<label for="pav">pavadinimas</label>
+			<input type="text" name="pav" id="pav" value="" class="text ui-widget-content ui-corner-all">
+				
+			<label for="platuma">platuma</label>
+			<input type="text" name="platuma" id="platuma" value="" class="text ui-widget-content ui-corner-all">
+			
+			<label for="ilguma">ilguma</label>
+			<input type="text" name="ilguma" id="ilguma" value="" class="text ui-widget-content ui-corner-all">
+			
+			<!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+		</fieldset>
+			<input type="hidden" name="id" id="id_rec" value="0">
+	</form>
 </div>
  </body>
 </html>

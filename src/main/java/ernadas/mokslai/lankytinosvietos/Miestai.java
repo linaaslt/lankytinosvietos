@@ -12,11 +12,11 @@ public class Miestai {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String pav;
-	private Integer platuma;
-	private Integer ilguma;
+	private Double platuma;
+	private Double ilguma;
 	private Integer id_salies;
 	
-	public Miestai (Integer id, String pav, Integer platuma, Integer ilguma, Integer id_salies) {
+	public Miestai (Integer id, String pav, Double platuma, Double ilguma, Integer id_salies) {
 		super();
 		this.id = id;
 		this.pav = pav;
@@ -45,19 +45,19 @@ public class Miestai {
 		this.pav = pav;
 	}
 
-	public Integer getPlatuma() {
+	public Double getPlatuma() {
 		return platuma;
 	}
 
-	public void setPlatuma(Integer platuma) {
+	public void setPlatuma(Double platuma) {
 		this.platuma = platuma;
 	}
 
-	public Integer getIlguma() {
+	public Double getIlguma() {
 		return ilguma;
 	}
 
-	public void setIlguma(Integer ilguma) {
+	public void setIlguma(Double ilguma) {
 		this.ilguma = ilguma;
 	}
 

@@ -156,8 +156,8 @@ public class AjaxController {
 		 				
 		 				FormPrepare.takeId ( id )
 		 				, pav
-		 				, FormPrepare.takeId ( platuma )
-		 				, FormPrepare.takeId ( ilguma )
+		 				, FormPrepare.doubleOrNull ( platuma )
+		 				, FormPrepare.doubleOrNull ( ilguma )
 		 				, FormPrepare.takeId ( id_salies )
 		 				
 		 		);
