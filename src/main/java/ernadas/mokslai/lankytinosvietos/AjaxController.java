@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller    // This means that this class is a Controller
 @RequestMapping(path="/ajax") // This means URL's start with /demo (after Application path)
 public class AjaxController {
-
-	// @Autowired
-	// private LaikytojaiRepository laikytojai_repository; 
 	
 	@Autowired
 	private SalysRepository salys_repository; 
 	
 	@Autowired
-	private MiestaiRepository miestai_repository; 
+	private MiestaiRepository miestai_repository;
+	
+	@Autowired
+	private VietosRepository vietos_repository; 
 	
 	@GetMapping(path="/lst-salys")
 	public @ResponseBody Iterable<Salys> getAllSalys() {
@@ -33,6 +33,12 @@ public class AjaxController {
 	public @ResponseBody Iterable<Miestai> getAllMiestai() {
 		// This returns a JSON or XML with the users
 		return miestai_repository.findAll();
+	}
+	
+	@GetMapping(path="/lst-vietos")
+	public @ResponseBody Iterable<Vietos> getAllVietos() {
+		// This returns a JSON or XML with the users
+		return vietos_repository.findAll();
 	}
 	
 	@GetMapping(path="/salys")
@@ -198,6 +204,94 @@ public class AjaxController {
 				 		
 				 		Miestai miestas = op_miestai.get();
 				 		miestai_repository.delete( miestas );
+			 		}	
+//			 	} 	   	
+		     return msg;
+		 } 
+	 
+	 @GetMapping(path="/vietos")
+		public @ResponseBody Vietos getVieta1(
+				
+	    		@RequestParam(required=true) Integer id
+				) {
+			// This returns a JSON or XML with the users
+			Optional<Vietos> op_men = vietos_repository.findById( id );
+			
+			Vietos vietos1 = new Vietos();
+			
+			if ( op_men.isPresent() ) {
+				
+				vietos1 = op_men.get(); 
+			}
+			
+			System.out.println( vietos1.toString() );
+			
+			return vietos1;
+		}	
+	 
+	 @RequestMapping("/vietos-pakeisti")
+	    public @ResponseBody String vietosSave(
+	    		@RequestParam(required=false) String id	
+	    		, @RequestParam(required=false) String aprasymas	
+	    		, @RequestParam(required=false) String id_prie_miesto
+	    		, @RequestParam(required=false) String ilguma
+	    		, @RequestParam(required=false) String pav
+	    		, @RequestParam(required=false) String platuma
+	    		// , @RequestParam(required=false) String irasas
+
+	    	) {
+		 
+		 	String msg = "nieks neatlikta";
+		 
+		 	// if ( irasas != null ) {
+	
+		 		Vietos vieta = new Vietos (
+		 				
+		 				FormPrepare.takeId ( id )
+		 				, aprasymas
+		 				, FormPrepare.takeId ( id_prie_miesto )
+		 				, FormPrepare.doubleOrNull ( ilguma )		 				
+		 				, pav 
+		 				, FormPrepare.doubleOrNull ( ilguma )
+		 				
+		 		);
+		 	
+		 		// if ( irasas.equals ( "papildyti" ) ) {
+		 			
+				 	msg = "bandėm įrašyti";			 			
+		 			
+		 			if ( vietos_repository.save( vieta ) != null ) {
+		 				
+					 	msg = "tipo išsaugojom";
+		 			}
+		 		// }
+	 		
+		 	// }
+	    	   	
+	        return msg;
+	    }		
+	
+	 @RequestMapping("/vietos-salinti")		
+	    public @ResponseBody String vietosSalinti(
+	    		@RequestParam(required=false) String id	
+	    		, @RequestParam(required=false) String irasas
+
+	    	) {
+			 
+			 	String msg = "nieks neatlikta";
+			 
+//			 	if ( ( irasas != null ) &&  irasas.equals ( "trinti" ) ) {
+			 		
+			 		msg = "ieškomas irašas";
+			 		
+			 		Optional<Vietos> op_vietos = vietos_repository.findById( FormPrepare.takeId ( id ) );
+			 		
+			 		if ( ! op_vietos.isEmpty() ) {
+			 			
+				 		msg = "irašas surastas, trinam";
+				 		
+				 		Vietos vieta = op_vietos.get();
+				 		vietos_repository.delete( vieta );
 			 		}	
 //			 	} 	   	
 		     return msg;

@@ -9,11 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 public class PageController {
 
 	@Autowired
 	private SalysRepository salys_repository;
+	
+	@Autowired
+	private VietosRepository vietos_repository;
+	
+	@Autowired
+	private MiestaiRepository miestai_repository;
 	
 	
 	@Autowired 
@@ -37,7 +44,7 @@ public class PageController {
     	) {
 	 
     	
-    //    model.addAttribute("lst_menu", Menu.values() );    	
+		model.addAttribute("lst_menu", Menu.values() );    	
         return "salys";
     }
 	
@@ -46,6 +53,16 @@ public class PageController {
     		Model model 
     		) {
 		
+		model.addAttribute("lst_menu", Menu.values() );	
 		return "miestai";
+	}
+	
+	@RequestMapping("/vietos")
+    public String vietos(	
+    		Model model 
+    		) {
+		
+		model.addAttribute("lst_menu", Menu.values() );
+		return "vietos";
 	}
 }

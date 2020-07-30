@@ -22,6 +22,25 @@
 				padding: 6px;
 				border: 1px solid grey;
 			}
+			nav a {
+		display: inline-block;
+		padding: 12px;
+		margin: 12px;
+		text-decoration: none;
+		color: Black;
+		background-color: #CAB85C;
+		-webkit-border-radius: 8px;
+		-moz-border-radius: 8px;
+		border-radius: 8px;		
+		-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);		
+		}
+		nav a:hover {
+			text-decoration: underline;	
+			background-color: #E3F392;	
+		}
+	
 		</style>
 	    <script
 		src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -65,7 +84,9 @@
 <h3> Šalys </h3>
 
  	Salių sąrašas
- 	
+<nav>
+		<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
+</nav> 	
 <div id="salys">
 </div>
  </body>

@@ -54,33 +54,34 @@
 																										alert ( 'ok, doc ready'  );
 																										
 					
-			$.ajax({
-					url: "http://localhost:8080/ajax/lst-salys" 
+			
+	$.ajax({
+					url: "http://localhost:8080/ajax/lst-miestai" 
 			}).done(
 			
-				function( data_salys ) {
+				function( data_miestai ) {
 				
-					options_salys = '';
+					options_miestai = '';
 					
-					for ( i= 0; i < data_salys.length; i++ ) {
+					for ( i= 0; i < data_miestai.length; i++ ) {
 																				//alert ( 'i, id, pav:' + i + ',' + this.produktai [ i ].id + ', ' + this.produktai [ i ].pav )
 	
-						options_salys += '<option value="' + data_salys [ i ].id + '">' + data_salys [ i ].pav + '</option>';
+						options_miestai += '<option value="' + data_miestai [ i ].id + '">' + data_miestai [ i ].pav + '</option>';
 	
 					}
 																			// alert( options );
 																			
-					select_salys = 	'<label for="id_salies">Salis</label>' +
-						'<select type="text" name="id_salies" id="id_salies" class="text ui-widget-content ui-corner-all">' +
-							options_salys +
+					select_miestai = 	'<label for="id_prie_miesto">Miestas</label>' +
+						'<select type="text" name="id_prie_miesto" id="id_prie_miesto" class="text ui-widget-content ui-corner-all">' +
+							options_miestai +
 						'</select>';
 						
-					$( '#id_salies_place' ).html ( select_salys );
+					$( '#id_miesto_place' ).html ( select_miestai );
 				}	
 			);
 																										
 																																																
-			crudMiestai = function(
+			crudVietos = function(
 			
 				fields
 				, fields_names
@@ -118,63 +119,66 @@
 				crud.call ( this, params );	// objektu surišimas pagal https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype                (OS/eilute 1)  ..
 			}
 				
-			crudMiestai.prototype = Object.create( crud.prototype ); // new crud;			// (OS/eilute 2)
+			crudVietos.prototype = Object.create( crud.prototype ); // new crud;			// (OS/eilute 2)
 				
-			crudMiestai.prototype.constructor = crudMiestai;						// (OS/eilute 3)																			
+			crudVietos.prototype.constructor = crudVietos;						// (OS/eilute 3)																			
 																				
-			crud_miestai = new crudMiestai ( 
+			crud_vietos = new crudVietos ( 
 
 				[
 					'pav' 
 					, 'platuma'	
 					, 'ilguma'	
-					, 'id_salies'
+					, 'id_prie_miesto'
+					, 'miestai.pav'
+					, 'aprasymas'
 				]
-				, [  'pavadinimas', 'platuma', 'ilguma', 'salies<br>id' ]
-				, 'http://localhost:8080/ajax/lst-miestai'
+				, [  'pavadinimas', 'platuma', 'ilguma', 'miesto<br>id', 'prie<br>miesto', 'aprasymas' ]
+				, 'http://localhost:8080/ajax/lst-vietos'
 				, ''				
-				, 'miestai'
-				, 'miesto_dialogo_forma'
+				, 'vietos'
+				, 'vietos_dialogo_forma'
 				, 400
 				, 640
-				, 'Miestas'
-				,  'http://localhost:8080/ajax/miestai-pakeisti'
-				,  'http://localhost:8080/ajax/miestai-salinti'
+				, 'Vieta'
+				,  'http://localhost:8080/ajax/vietos-pakeisti'
+				,  'http://localhost:8080/ajax/vietos-salinti'
 				, [ 
 					'pav' 
 					, 'platuma'	
 					, 'ilguma'	
-					, 'id_salies'
+					, 'id_prie_miesto'
+					, 'aprasymas'
 				]
 				, 'pav'
-				,  [ 'text', 'text', 'text', 'select' ]
+				,  [ 'text', 'text', 'text', 'select', 'text' ]
 			);
 			
 			// console.log ( crud_miestai );
 			
-			crud_miestai.initEmpty();						
-			crud_miestai.refreshData();										
+			crud_vietos.initEmpty();						
+			crud_vietos.refreshData();										
 		});	
 	</script>
 	</head>
 <body>
-<h3> Miestai </h3>
+<h3> Vietos </h3>
 
- 	Salių sąrašas
-<nav>
+ 	Vietų sąrašas
+ <nav>
 		<a th:each="menu_item : ${lst_menu}" th:href="${menu_item.itemurl()}" th:text="${menu_item}"></a>
-</nav> 	
-<div id="miestai">
+</nav>	
+<div id="vietos">
 </div>
-<div id="miesto_dialogo_forma" class="ui-dialog-content ui-widget-content">
+<div id="vietos_dialogo_forma" class="ui-dialog-content ui-widget-content">
 	<p class="validateTips">Visi laukeliai turi buti užpildyti.</p>
 	<p class="name_item" id="name_item"></p>
 	<form action="">
 		<fieldset>
 		
-			<div id="id_salies_place">
-				<label for="id_salies">Salis</label>
-				<select type="text" name="id_salies" id="id_salies" class="text ui-widget-content ui-corner-all">
+			<div id="id_miesto_place">
+				<label for="id_prie_miesto">Miestas</label>
+				<select type="text" name="id_prie_miesto" id="id_prie_miesto" class="text ui-widget-content ui-corner-all">
 				</select>
 			</div>
 				
@@ -186,6 +190,9 @@
 			
 			<label for="ilguma">ilguma</label>
 			<input type="text" name="ilguma" id="ilguma" value="" class="text ui-widget-content ui-corner-all">
+						
+			<label for="aprasymas">aprasymas</label>
+			<input type="text" name="aprasymas" id="aprasymas" value="" class="text ui-widget-content ui-corner-all">
 			
 			<!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
 		</fieldset>
